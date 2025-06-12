@@ -266,7 +266,8 @@ function buildNetworkData(filteredPeople) {
       title: person.name,
       size,
       color,
-      // font: { size: 16 }, // Se elimina de aquí para definirla globalmente en options.nodes
+      // ELIMINAR O COMENTAR esta línea para que la configuración global de 'font' en 'options.nodes' tome efecto.
+      // font: { size: 16 },
       institution: person.Institution[0],
       isPI
     };
@@ -318,7 +319,7 @@ function updateNetwork() {
       shadow: true,
       font: {
         size: 16,
-        color: '#ffffff', // Color del texto (blanco para que contraste con el fondo azul)
+        color: '#000000', // <-- CAMBIO AQUÍ: Color de la fuente a negro
         face: 'arial',
         align: 'center', // Alinea el texto al centro del nodo
         vadjust: 0 // Ajusta la posición vertical del texto (0 para centrar)
@@ -333,19 +334,19 @@ function updateNetwork() {
         align: 'middle',
         color: '#333',
         background: '#fff',
-        strokeWidth: 0 // Elimina el contorno del texto
+        strokeWidth: 0
       },
       scaling: {
         label: {
-          enabled: true, // Habilita el escalado para la etiqueta (opcional)
+          enabled: true,
           min: 8,
           max: 20
         }
       },
       chosen: {
-        label: true // Muestra la etiqueta cuando el borde es seleccionado/hovered
+        label: true
       },
-      hoverWidth: 0.5 // Incrementa el ancho del borde al pasar el ratón
+      hoverWidth: 0.5
     },
     physics: {
       enabled: true,
