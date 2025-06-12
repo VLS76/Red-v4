@@ -284,7 +284,8 @@ function buildNetworkData(filteredPeople) {
         const b = new Set(p2[field.name] || []);
         const overlap = [...a].filter(x => b.has(x));
         if (overlap.length > 0) {
-          shared.push(`${field.name}: ${overlap.join(', ')}`);
+          //shared.push(`${field.name}: ${overlap.join(', ')}`);
+          shared.push(`${overlap.join(', ')}`);
         }
       });
       if (shared.length > 0) {
@@ -328,33 +329,12 @@ function updateNetwork() {
         type: 'dynamic'
       }
     },
-	/* Configure edges to show label only on hover
-      font: {
-        size: 12,
-        align: 'middle',
-        color: '#333',
-        background: '#fff',
-        strokeWidth: 0 // Remove stroke around the text
-      },
-      scaling: {
-        label: {
-          enabled: true, // Enable scaling for label (optional, but good for visibility)
-          min: 8,
-          max: 20
-        }
-      },
-      chosen: {
-        label: true // Show label when edge is chosen/hovered
-      },
-      hoverWidth: 0.5 // Width increase on hover
-    },
-    */
     physics: {
       enabled: true,
       barnesHut: {
-        gravitationalConstant: -4000,
+        gravitationalConstant: -8000,
         centralGravity: 0.3,
-        springLength: 120,
+        springLength: 180,
         springConstant: 0.05,
         damping: 0.09
       }
