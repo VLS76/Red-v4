@@ -266,7 +266,7 @@ function buildNetworkData(filteredPeople) {
       title: person.name,
       size,
       color,
-      font: { size: 16 },
+      // font: { size: 16 }, // Se elimina de aquí para definirla globalmente en options.nodes
       institution: person.Institution[0],
       isPI
     };
@@ -291,20 +291,13 @@ function buildNetworkData(filteredPeople) {
         edges.push({
           from: p1.id,
           to: p2.id,
-          // (Re)moved the label property to hide common indicators on edges
-          label: shared.join('\n'),
-          font: { align: 'middle', size: 12, background: '#fff' },
+          label: shared.join('\n'), // Etiqueta para el pop-up al pasar el ratón
           color: { color: '#aaa', highlight: '#1976d2' },
           width: 2
         });
       }
     }
   }
-
-  // Satellite layout for PI/non-PI in same institution
-  // For each PI, arrange non-PI people in same institution around them
-  // (vis-network will auto-layout, but we can bias the positions)
-  // Optionally, you can use physics for more organic layout
 
   return { nodes, edges };
 }
@@ -323,7 +316,6 @@ function updateNetwork() {
       shape: 'dot',
       borderWidth: 2,
       shadow: true,
-      //nombres dentro de los nodos
       font: {
         size: 16,
         color: '#ffffff', // Color del texto (blanco para que contraste con el fondo azul)
@@ -336,25 +328,24 @@ function updateNetwork() {
       smooth: {
         type: 'dynamic'
       },
-      // Configure edges to show label only on hover
       font: {
         size: 12,
         align: 'middle',
         color: '#333',
         background: '#fff',
-        strokeWidth: 0 // Remove stroke around the text
+        strokeWidth: 0 // Elimina el contorno del texto
       },
       scaling: {
         label: {
-          enabled: true, // Enable scaling for label (optional, but good for visibility)
+          enabled: true, // Habilita el escalado para la etiqueta (opcional)
           min: 8,
           max: 20
         }
       },
       chosen: {
-        label: true // Show label when edge is chosen/hovered
+        label: true // Muestra la etiqueta cuando el borde es seleccionado/hovered
       },
-      hoverWidth: 0.5 // Width increase on hover
+      hoverWidth: 0.5 // Incrementa el ancho del borde al pasar el ratón
     },
     physics: {
       enabled: true,
