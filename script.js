@@ -291,8 +291,9 @@ function buildNetworkData(filteredPeople) {
         edges.push({
           from: p1.id,
           to: p2.id,
-          label: shared.join('\n'),
-          font: { align: 'middle', size: 12, background: '#fff' },
+          // Removed the label property to hide common indicators on edges
+          //label: shared.join('\n'),
+          //font: { align: 'middle', size: 12, background: '#fff' },
           color: { color: '#aaa', highlight: '#1976d2' },
           width: 2
         });
