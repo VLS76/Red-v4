@@ -328,7 +328,7 @@ function updateNetwork() {
         type: 'dynamic'
       }
     },
-	// Configure edges to show label only on hover
+	/* Configure edges to show label only on hover
       font: {
         size: 12,
         align: 'middle',
@@ -348,6 +348,7 @@ function updateNetwork() {
       },
       hoverWidth: 0.5 // Width increase on hover
     },
+    */
     physics: {
       enabled: true,
       barnesHut: {
