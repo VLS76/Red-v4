@@ -292,8 +292,8 @@ function buildNetworkData(filteredPeople) {
           from: p1.id,
           to: p2.id,
           // Removed the label property to hide common indicators on edges
-          //label: shared.join('\n'),
-          //font: { align: 'middle', size: 12, background: '#fff' },
+          label: shared.join('\n'),
+          font: { align: 'middle', size: 12, background: '#fff' },
           color: { color: '#aaa', highlight: '#1976d2' },
           width: 2
         });
@@ -322,7 +322,15 @@ function updateNetwork() {
     nodes: {
       shape: 'dot',
       borderWidth: 2,
-      shadow: true
+      shadow: true,
+      //nombres dentro de los nodos
+      font: {
+        size: 16,
+        color: '#ffffff', // Color del texto (blanco para que contraste con el fondo azul)
+        face: 'arial',
+        align: 'center', // Alinea el texto al centro del nodo
+        vadjust: 0 // Ajusta la posición vertical del texto (0 para centrar)
+      }
     },
     edges: {
       smooth: {
