@@ -263,11 +263,16 @@ function buildNetworkData(filteredPeople) {
     return {
       id: person.id,
       label: person.name,
-      title: person.name,
+      title: `${person.name}\nInstitution: ${person.Institution[0]}\nRole: ${person.Role.join(', ')}`,
       size,
       color,
-      // *** ESTA LÍNEA DEBE SER ELIMINADA O COMENTADA ***
-      // font: { size: 16 },
+      font: {
+        size: 14,
+        color: '#ffffff',
+        face: 'Arial',
+        strokeWidth: 2,
+        strokeColor: '#000000'
+      },
       institution: person.Institution[0],
       isPI
     };
@@ -292,9 +297,10 @@ function buildNetworkData(filteredPeople) {
         edges.push({
           from: p1.id,
           to: p2.id,
-          label: shared.join('\n'), // La etiqueta se mantiene aquí para el hover
+          title: shared.join('\n'), // Cambiado de 'label' a 'title' para el tooltip
           color: { color: '#aaa', highlight: '#1976d2' },
-          width: 2
+          width: 2,
+          smooth: { type: 'continuous' }
         });
       }
     }
@@ -316,40 +322,43 @@ function updateNetwork() {
     nodes: {
       shape: 'dot',
       borderWidth: 2,
-      shadow: true,
-      // *** CAMBIOS AQUÍ para el nombre dentro del nodo ***
+      shadow: {
+        enabled: true,
+        color: 'rgba(0,0,0,0.2)',
+        size: 10,
+        x: 2,
+        y: 2
+      },
       font: {
-        size: 16,
-        color: '#000000', // Color del texto a negro
-        face: 'arial',
-        align: 'center', // Alinea el texto al centro del nodo
-        vadjust: 0 // Ajusta la posición vertical del texto (0 para centrar)
+        size: 14,
+        color: '#ffffff',
+        face: 'Arial',
+        strokeWidth: 2,
+        strokeColor: '#000000',
+        align: 'center'
+      },
+      chosen: {
+        node: function(values, id, selected, hovering) {
+          values.shadow = true;
+          values.shadowColor = '#1976d2';
+          values.shadowSize = 15;
+        }
       }
     },
     edges: {
       smooth: {
-        type: 'dynamic'
+        type: 'continuous',
+        roundness: 0.2
       },
-      // *** CAMBIOS AQUÍ para los indicadores en el borde (hover) ***
-      font: {
-        size: 12,
-        align: 'middle',
-        color: '#333', // Color del texto del label cuando aparece
-        background: '#fff', // Fondo del label cuando aparece
-        strokeWidth: 0, // Elimina el contorno del texto
+      color: {
+        color: '#aaa',
+        highlight: '#1976d2',
+        hover: '#1976d2'
       },
-      scaling: {
-        label: {
-          enabled: true, // Habilita el escalado para la etiqueta (opcional, pero bueno para visibilidad)
-          min: 8,
-          max: 20
-        }
-      },
-      chosen: {
-        // *** ESTA ES LA CLAVE para mostrar el label SÓLO al pasar el ratón ***
-        label: true
-      },
-      hoverWidth: 0.5 // Incrementa el ancho del borde al pasar el ratón
+      width: 2,
+      hoverWidth: 3,
+      selectionWidth: 3,
+      chosen: false // Deshabilitamos el comportamiento de selección de edges
     },
     physics: {
       enabled: true,
@@ -358,15 +367,23 @@ function updateNetwork() {
         centralGravity: 0.3,
         springLength: 120,
         springConstant: 0.05,
-        damping: 0.09
+        damping: 0.09,
+        avoidOverlap: 0.1
+      },
+      stabilization: {
+        iterations: 150,
+        updateInterval: 25
       }
     },
     layout: {
-      improvedLayout: true
+      improvedLayout: true,
+      hierarchical: false
     },
     interaction: {
       hover: true,
-      tooltipDelay: 100
+      tooltipDelay: 200,
+      hideEdgesOnDrag: false,
+      hideNodesOnDrag: false
     }
   };
 
@@ -382,8 +399,10 @@ function updateNetwork() {
     }
   });
 
-  // El comportamiento de hover en los edges para mostrar la etiqueta es gestionado por vis.js
-  // gracias a `edges.chosen.label: true` y `edges.label` en la definición de cada edge.
+  // Estabilización completa
+  network.once("stabilizationIterationsDone", function() {
+    console.log("Network stabilized");
+  });
 }
 
 // --- Person Info Box ---
