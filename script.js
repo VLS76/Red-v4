@@ -284,8 +284,7 @@ function buildNetworkData(filteredPeople) {
         const b = new Set(p2[field.name] || []);
         const overlap = [...a].filter(x => b.has(x));
         if (overlap.length > 0) {
-          //shared.push(`${field.name}: ${overlap.join(', ')}`);
-          shared.push(`${overlap.join(', ')}`);
+          shared.push(`${field.name}: ${overlap.join(', ')}`);
         }
       });
       if (shared.length > 0) {
@@ -332,9 +331,9 @@ function updateNetwork() {
     physics: {
       enabled: true,
       barnesHut: {
-        gravitationalConstant: -8000,
+        gravitationalConstant: -4000,
         centralGravity: 0.3,
-        springLength: 180,
+        springLength: 120,
         springConstant: 0.05,
         damping: 0.09
       }
