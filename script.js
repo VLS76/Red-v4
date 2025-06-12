@@ -329,6 +329,26 @@ function updateNetwork() {
         type: 'dynamic'
       }
     },
+    // Configure edges to show label only on hover
+      font: {
+        size: 12,
+        align: 'middle',
+        color: '#333',
+        background: '#fff',
+        strokeWidth: 0 // Remove stroke around the text
+      },
+      scaling: {
+        label: {
+          enabled: true, // Enable scaling for label (optional, but good for visibility)
+          min: 8,
+          max: 20
+        }
+      },
+      chosen: {
+        label: true // Show label when edge is chosen/hovered
+      },
+      hoverWidth: 0.5 // Width increase on hover
+    },
     physics: {
       enabled: true,
       barnesHut: {
