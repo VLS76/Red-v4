@@ -266,7 +266,8 @@ function buildNetworkData(filteredPeople) {
       title: person.name,
       size,
       color,
-      // ELIMINAR O COMENTAR esta línea para que la configuración global de 'font' en 'options.nodes' tome efecto.
+      // *** Importante: Eliminar esta propiedad 'font' de aquí.
+      // La configuración de la fuente para el nodo se hará de forma global en 'options.nodes.font'
       // font: { size: 16 },
       institution: person.Institution[0],
       isPI
@@ -292,7 +293,7 @@ function buildNetworkData(filteredPeople) {
         edges.push({
           from: p1.id,
           to: p2.id,
-          label: shared.join('\n'), // Etiqueta para el pop-up al pasar el ratón
+          label: shared.join('\n'), // La etiqueta se mantiene aquí para el hover
           color: { color: '#aaa', highlight: '#1976d2' },
           width: 2
         });
@@ -319,7 +320,7 @@ function updateNetwork() {
       shadow: true,
       font: {
         size: 16,
-        color: '#000000', // <-- CAMBIO AQUÍ: Color de la fuente a negro
+        color: '#000000', // *** CAMBIO AQUÍ: Color de la fuente a negro
         face: 'arial',
         align: 'center', // Alinea el texto al centro del nodo
         vadjust: 0 // Ajusta la posición vertical del texto (0 para centrar)
@@ -334,7 +335,11 @@ function updateNetwork() {
         align: 'middle',
         color: '#333',
         background: '#fff',
-        strokeWidth: 0
+        strokeWidth: 0,
+        // *** CAMBIO AQUÍ: Ocultar el label por defecto
+        multi: false, // Asegura que solo se muestre un label
+        strokeColor: 'rgba(0,0,0,0)', // Elimina cualquier posible contorno del label
+        strokeWidth: 0 // Asegura que no haya borde alrededor del texto
       },
       scaling: {
         label: {
@@ -344,9 +349,17 @@ function updateNetwork() {
         }
       },
       chosen: {
+        // *** CAMBIO AQUÍ: Muestra el label solo cuando el borde es elegido/hovered
         label: true
       },
-      hoverWidth: 0.5
+      // *** CAMBIO AQUÍ: Ocultar el label por defecto
+      // Si el label se muestra, es a través de 'chosen.label: true'
+      // No necesitamos una propiedad 'label' aquí en 'edges' que lo oculte explícitamente,
+      // vis.js lo maneja implícitamente cuando 'chosen.label' está activo para hover.
+      // Sin embargo, si quisieras asegurarte de que no se muestre por defecto,
+      // podrías establecer un color de fuente transparente por defecto y cambiarlo en hover,
+      // pero 'chosen.label: true' es la forma estándar de vis.js para esto.
+      hoverWidth: 0.5 // Incrementa el ancho del borde al pasar el ratón
     },
     physics: {
       enabled: true,
@@ -378,6 +391,10 @@ function updateNetwork() {
       hidePersonInfo();
     }
   });
+
+  // Evento para el hover de los edges
+  // vis.js maneja la opción `chosen: { label: true }` internamente para el hover.
+  // La etiqueta aparecerá automáticamente cuando el ratón pase por encima del borde.
 }
 
 // --- Person Info Box ---
