@@ -260,19 +260,25 @@ function buildNetworkData(filteredPeople) {
         color = '#90caf9';
       }
     }
+
+    // *** CAMBIO CLAVE AQUÍ: Dividir el nombre y el apellido ***
+    const nameParts = person.name.split(' ');
+    let nodeLabel = person.name; // Por defecto el nombre completo
+    if (nameParts.length > 1) {
+      // Tomamos la primera parte como nombre y el resto como apellido(s)
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' '); // Une el resto como apellido
+      nodeLabel = `${firstName}\n${lastName}`; // Añade un salto de línea
+    }
+    // *** FIN CAMBIO CLAVE ***
+
     return {
       id: person.id,
-      label: person.name,
-      title: `${person.name}\nInstitution: ${person.Institution[0]}\nRole: ${person.Role.join(', ')}`,
+      label: nodeLabel, // Usamos la etiqueta con salto de línea
+      title: person.name, // El title (tooltip) sigue mostrando el nombre completo
       size,
       color,
-      font: {
-        size: 14,
-        color: '#ffffff',
-        face: 'Arial',
-        strokeWidth: 2,
-        strokeColor: '#000000'
-      },
+      // font: { size: 16 }, // Asegúrate de que esta línea esté eliminada o comentada
       institution: person.Institution[0],
       isPI
     };
@@ -297,10 +303,9 @@ function buildNetworkData(filteredPeople) {
         edges.push({
           from: p1.id,
           to: p2.id,
-          title: shared.join('\n'), // Cambiado de 'label' a 'title' para el tooltip
+          label: shared.join('\n'), // La etiqueta se mantiene aquí para el hover
           color: { color: '#aaa', highlight: '#1976d2' },
-          width: 2,
-          smooth: { type: 'continuous' }
+          width: 2
         });
       }
     }
@@ -322,43 +327,37 @@ function updateNetwork() {
     nodes: {
       shape: 'dot',
       borderWidth: 2,
-      shadow: {
-        enabled: true,
-        color: 'rgba(0,0,0,0.2)',
-        size: 10,
-        x: 2,
-        y: 2
-      },
+      shadow: true,
       font: {
-        size: 14,
-        color: '#ffffff',
-        face: 'Arial',
-        strokeWidth: 2,
-        strokeColor: '#000000',
-        align: 'center'
-      },
-      chosen: {
-        node: function(values, id, selected, hovering) {
-          values.shadow = true;
-          values.shadowColor = '#1976d2';
-          values.shadowSize = 15;
-        }
+        size: 16,
+        color: '#000000', // Color del texto a negro
+        face: 'arial',
+        align: 'center', // Alinea el texto al centro del nodo
+        vadjust: 0 // Ajusta la posición vertical del texto (0 para centrar la línea superior)
       }
     },
     edges: {
       smooth: {
-        type: 'continuous',
-        roundness: 0.2
+        type: 'dynamic'
       },
-      color: {
-        color: '#aaa',
-        highlight: '#1976d2',
-        hover: '#1976d2'
+      font: {
+        size: 12,
+        align: 'middle',
+        color: '#333',
+        background: '#fff',
+        strokeWidth: 0,
       },
-      width: 2,
-      hoverWidth: 3,
-      selectionWidth: 3,
-      chosen: false // Deshabilitamos el comportamiento de selección de edges
+      scaling: {
+        label: {
+          enabled: true,
+          min: 8,
+          max: 20
+        }
+      },
+      chosen: {
+        label: true
+      },
+      hoverWidth: 0.5
     },
     physics: {
       enabled: true,
@@ -367,23 +366,15 @@ function updateNetwork() {
         centralGravity: 0.3,
         springLength: 120,
         springConstant: 0.05,
-        damping: 0.09,
-        avoidOverlap: 0.1
-      },
-      stabilization: {
-        iterations: 150,
-        updateInterval: 25
+        damping: 0.09
       }
     },
     layout: {
-      improvedLayout: true,
-      hierarchical: false
+      improvedLayout: true
     },
     interaction: {
       hover: true,
-      tooltipDelay: 200,
-      hideEdgesOnDrag: false,
-      hideNodesOnDrag: false
+      tooltipDelay: 100
     }
   };
 
@@ -397,11 +388,6 @@ function updateNetwork() {
     } else {
       hidePersonInfo();
     }
-  });
-
-  // Estabilización completa
-  network.once("stabilizationIterationsDone", function() {
-    console.log("Network stabilized");
   });
 }
 
